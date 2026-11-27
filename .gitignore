@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# Python virtual environments
+.venv/
+**/.venv/
+
+# Frontend dependencies/build artifacts
+codes/client/frontend/node_modules/
+codes/client/frontend/dist/
+codes/client/frontend/dist-node-types/
+codes/client/frontend/*.tsbuildinfo
+
+# Model weights (large binaries, not source code)
+codes/server/weights/*
+!codes/server/weights/.gitkeep

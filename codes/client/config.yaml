@@ -1,0 +1,22 @@
+# MeetingAssist client configuration. Captures audio and relays it to the server.
+
+server:
+  host: 127.0.0.1                   # server IP address or hostname
+  port: 8765                        # must match server config.yaml server.port
+  token: ""                         # must match server config.yaml server.token
+  connect_timeout_seconds: 5.0
+  stop_timeout_seconds: 70.0        # wait for final results after Stop; keep above server stop_drain_seconds
+
+bridge:
+  host: 127.0.0.1                   # local service for the desktop UI; keep on loopback
+  port: 8766
+
+logging:
+  level: INFO
+
+audio:
+  sample_rate: 16000                # must match server config.yaml audio.sample_rate
+  chunk_seconds: 0.25               # capture block sent per network frame
+  source: microphone                # microphone | system
+  microphone_device: ""             # empty = default input device
+  loopback_device: ""               # empty = default speaker

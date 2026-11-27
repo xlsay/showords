@@ -1,0 +1,59 @@
+# MeetingAssist server configuration. Receives client audio, runs VAD, Whisper and translation.
+
+device: auto                        # auto | cpu | cuda, default placement for all models
+
+server:
+  host: 0.0.0.0                     # listen on all interfaces so clients can connect
+  port: 8765                        # must match client config.yaml server.port
+  token: ""                         # must match client config.yaml server.token; empty = no auth
+  auth_timeout_seconds: 10          # close connections that never send a start message
+  max_queued_seconds: 30.0          # drop incoming audio beyond this backlog
+  stop_drain_seconds: 60.0          # time to finish queued audio and translations on stop
+
+logging:
+  level: INFO
+
+weights:
+  whisper_dir: weights/whisper      # faster-whisper download cache, relative to this folder
+
+audio:
+  sample_rate: 16000                # must match client config.yaml audio.sample_rate
+  chunk_seconds: 0.75               # analysis window fed to the detector
+
+vad:
+  enabled: true
+  threshold: 0.38                   # silero speech probability
+  energy_rms_threshold: 0.005       # RMS gate used when silero is unavailable
+  pre_speech_pad_ms: 120
+  post_speech_pad_ms: 220
+  trailing_silence_seconds: 0.45    # silence that closes an utterance
+  max_segment_seconds: 12.0         # force a flush when speech runs long
+
+whisper:
+  model_size: auto                  # auto | tiny | base | small | medium | large-v3 | large-v3-turbo
+  device: auto                      # auto | cpu | cuda
+  compute_type: auto                # auto | int8 | float16 | float32
+  beam_size: 1
+  cpu_threads: 0                    # 0 = let ctranslate2 choose
+  num_workers: 1
+  vad_threshold: 0.3
+  vad_min_speech_ms: 100
+  vad_min_silence_ms: 300
+  vad_speech_pad_ms: 400
+  min_confidence: 0.25              # drop utterances below this confidence
+  languages: [zh, en]               # restrict language detection to these
+  workers: 1                        # concurrent transcription calls
+
+translation:
+  enabled: true
+  pairs:                            # detected language -> target language
+    zh: en
+    en: zh
+  max_tokens: 512
+  workers: 2                        # concurrent translation requests
+
+llm:
+  api_key: ""
+  base_url: https://api.openai.com/v1
+  model: gpt-4o-mini
+  timeout_seconds: 45
