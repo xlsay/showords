@@ -82,7 +82,7 @@ class BackendSupervisor {
           if (err) {
             resolve({
               ok: false,
-              message: "The backend environment looks broken. Please run the client installer (scripts/install -Role client) again.",
+              message: "The backend environment looks broken. Please repeat the client first-time setup steps in README.md.",
             });
             return;
           }
@@ -95,7 +95,7 @@ class BackendSupervisor {
               ok: false,
               message:
                 `The backend environment uses Python ${version || "an unknown version"}, but MeetingAssist needs ` +
-                "Python 3.12 or newer. Please recreate it with the client installer (scripts/install -Role client).",
+                "Python 3.12 or newer. Please recreate it with the client first-time setup steps in README.md.",
             });
             return;
           }
@@ -104,7 +104,7 @@ class BackendSupervisor {
               ok: false,
               message:
                 "The backend environment is incomplete — its dependencies aren't installed. " +
-                "Please run the client installer (scripts/install -Role client) again.",
+                "Please repeat the client first-time setup steps in README.md.",
             });
             return;
           }
@@ -163,7 +163,7 @@ class BackendSupervisor {
     if (!fs.existsSync(venvPython)) {
       this._emit(
         "failed",
-        "Setup isn't finished — the backend environment is missing. Please run the client installer (scripts/install -Role client) once.",
+        "Setup isn't finished — the backend environment is missing. Please follow the client first-time setup steps in README.md.",
       );
       return;
     }
